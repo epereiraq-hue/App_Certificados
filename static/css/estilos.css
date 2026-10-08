@@ -1,0 +1,223 @@
+/* Estilos Institucionales - App de Certificados */
+:root {
+    --primary-color: #14213D;
+    --accent-color: #B8923D;
+    --accent-light: #F4ECE1;
+    --bg-light: #F8F9FA;
+    --card-bg: #FFFFFF;
+    --text-dark: #212529;
+    --text-muted: #6C757D;
+    --border-color: #E0E0E0;
+    --success-bg: #E8F5E9;
+    --success-color: #2E7D32;
+    --warning-bg: #FFF8E1;
+    --warning-color: #F57F17;
+    --danger-bg: #FFEBEE;
+    --danger-color: #C62828;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-light);
+    color: var(--text-dark);
+    line-height: 1.6;
+}
+
+.header {
+    background-color: var(--primary-color);
+    color: #FFFFFF;
+    padding: 1.5rem 2rem;
+    border-bottom: 4px solid var(--accent-color);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.header h1 {
+    font-size: 1.8rem;
+    font-weight: 600;
+}
+
+.header p {
+    color: var(--accent-color);
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+}
+
+/* Tarjetas de Indicadores */
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.kpi-card {
+    background: var(--card-bg);
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    border-top: 4px solid var(--primary-color);
+    text-align: center;
+    transition: transform 0.2s ease;
+}
+
+.kpi-card:hover {
+    transform: translateY(-2px);
+}
+
+.kpi-card.aprobacion {
+    border-top-color: var(--success-color);
+}
+
+.kpi-card.participacion {
+    border-top-color: var(--accent-color);
+}
+
+.kpi-card.sin-certificado {
+    border-top-color: var(--danger-color);
+}
+
+.kpi-card .number {
+    font-size: 2.8rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    line-height: 1.2;
+}
+
+.kpi-card.aprobacion .number { color: var(--success-color); }
+.kpi-card.participacion .number { color: var(--accent-color); }
+.kpi-card.sin-certificado .number { color: var(--danger-color); }
+
+.kpi-card .label {
+    font-size: 1rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Alertas de Inconsistencias */
+.alert-section {
+    background-color: var(--danger-bg);
+    border-left: 5px solid var(--danger-color);
+    padding: 1.5rem;
+    border-radius: 6px;
+    margin-bottom: 2rem;
+}
+
+.alert-section h3 {
+    color: var(--danger-color);
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.alert-list {
+    list-style: none;
+}
+
+.alert-item {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(198, 40, 40, 0.15);
+    color: #424242;
+    font-size: 0.95rem;
+}
+
+.alert-item:last-child {
+    border-bottom: none;
+}
+
+.alert-item strong {
+    color: var(--danger-color);
+}
+
+/* Tabla de Datos */
+.table-section {
+    background: var(--card-bg);
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.table-section h2 {
+    color: var(--primary-color);
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid var(--accent-light);
+    padding-bottom: 0.5rem;
+}
+
+.table-responsive {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 0.5rem;
+}
+
+th, td {
+    padding: 0.85rem 1rem;
+    text-align: left;
+}
+
+th {
+    background-color: var(--primary-color);
+    color: #FFFFFF;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+}
+
+tr:nth-child(even) {
+    background-color: #F8F9FA;
+}
+
+tr:hover {
+    background-color: var(--accent-light);
+}
+
+/* Badges / Insignias */
+.badge {
+    padding: 0.35rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.badge-aprobacion {
+    background-color: var(--success-bg);
+    color: var(--success-color);
+}
+
+.badge-participacion {
+    background-color: var(--warning-bg);
+    color: var(--warning-color);
+}
+
+.badge-sin-certificado {
+    background-color: var(--danger-bg);
+    color: var(--danger-color);
+}
+
+footer {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-top: 3rem;
+}

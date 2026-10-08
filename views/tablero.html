@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}Tablero Principal - App de Certificados{% endblock %}
+
+{% block content %}
+<!-- Tarjetas KPI -->
+<div class="kpi-grid">
+    <div class="kpi-card aprobacion">
+        <div class="number">{{ conteos.aprobacion }}</div>
+        <div class="label">Aprobación</div>
+    </div>
+    <div class="kpi-card participacion">
+        <div class="number">{{ conteos.participacion }}</div>
+        <div class="label">Participación</div>
+    </div>
+    <div class="kpi-card sin-certificado">
+        <div class="number">{{ conteos.sin_certificado }}</div>
+        <div class="label">Sin Certificado</div>
+    </div>
+</div>
+
+<!-- Cuadro de Inconsistencias -->
+{% if inconsistencias %}
+<div class="alert-section">
+    <h3>⚠️ Alertas de Inconsistencias Detectadas ({{ conteos.inconsistencias }})</h3>
+    <ul class="alert-list">
+        {% for inc in inconsistencias %}
+        <li class="alert-item">
+            <strong>[{{ inc.tipo }}]</strong> ID: {{ inc.identificacion }} - {{ inc.nombre_completo }} ({{ inc.programa }}): {{ inc.detalle }}
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+
+<!-- Tabla de Estudiantes -->
+<div class="table-section">
+    <h2>Registro General de Estudiantes y Estado de Certificación</h2>
+    <div class="table-responsive">
+        <table>
+            <thead>
+                <tr>
+                    <th>Identificación</th>
+                    <th>Estudiante</th>
+                    <th>Programa</th>
+                    <th>Promedio Nota</th>
+                    <th>Asistencia (%)</th>
+                    <th>Estado / Certificado</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for est in estudiantes %}
+                <tr>
+                    <td><strong>{{ est.identificacion }}</strong></td>
+                    <td>{{ est.nombre_completo }}</td>
+                    <td>{{ est.programa }}</td>
+                    <td>{{ "%.2f"|format(est.promedio_nota) }}</td>
+                    <td>{{ "%.2f"|format(est.promedio_asistencia) }}%</td>
+                    <td>
+                        {% if est.es_aprobado %}
+                            <span class="badge badge-aprobacion">Aprobación</span>
+                        {% elif est.es_participacion %}
+                            <span class="badge badge-participacion">Participación</span>
+                        {% else %}
+                            <span class="badge badge-sin-certificado">Sin Certificado</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
