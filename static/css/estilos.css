@@ -10,8 +10,8 @@
     --border-color: #E0E0E0;
     --success-bg: #E8F5E9;
     --success-color: #2E7D32;
-    --warning-bg: #FFF8E1;
-    --warning-color: #F57F17;
+    --info-bg: #E3F2FD;
+    --info-color: #1565C0;
     --danger-bg: #FFEBEE;
     --danger-color: #C62828;
 }
@@ -81,7 +81,7 @@ body {
 }
 
 .kpi-card.participacion {
-    border-top-color: var(--accent-color);
+    border-top-color: var(--info-color);
 }
 
 .kpi-card.sin-certificado {
@@ -96,7 +96,7 @@ body {
 }
 
 .kpi-card.aprobacion .number { color: var(--success-color); }
-.kpi-card.participacion .number { color: var(--accent-color); }
+.kpi-card.participacion .number { color: var(--info-color); }
 .kpi-card.sin-certificado .number { color: var(--danger-color); }
 
 .kpi-card .label {
@@ -205,13 +205,30 @@ tr:hover {
 }
 
 .badge-participacion {
-    background-color: var(--warning-bg);
-    color: var(--warning-color);
+    background-color: var(--info-bg);
+    color: var(--info-color);
 }
 
 .badge-sin-certificado {
     background-color: var(--danger-bg);
     color: var(--danger-color);
+}
+
+/* Filtro por programa */
+.filter-section {
+    background: var(--card-bg);
+    border-radius: 8px;
+    padding: 1rem 1.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    margin-bottom: 1.5rem;
+}
+
+.filter-section select {
+    margin-left: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 1rem;
 }
 
 footer {

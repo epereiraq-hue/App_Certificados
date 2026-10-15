@@ -2,4 +2,10 @@
 .venv
 __pycache__/
 *.pyc
+*.pyo
 .vercel
+*.tmp
+*.log
+*~
+.DS_Store
+Thumbs.db

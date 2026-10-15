@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 
-{% block title %}Tablero Principal - App de Certificados{% endblock %}
+{% block title %}Tablero Principal - Academia Horizonte{% endblock %}
 
 {% block content %}
-<!-- Tarjetas KPI -->
+<!-- Contadores de arriba -->
 <div class="kpi-grid">
     <div class="kpi-card aprobacion">
         <div class="number">{{ conteos.aprobacion }}</div>
@@ -19,41 +19,41 @@
     </div>
 </div>
 
-<!-- Cuadro de Inconsistencias -->
-{% if inconsistencias %}
-<div class="alert-section">
-    <h3>⚠️ Alertas de Inconsistencias Detectadas ({{ conteos.inconsistencias }})</h3>
-    <ul class="alert-list">
-        {% for inc in inconsistencias %}
-        <li class="alert-item">
-            <strong>[{{ inc.tipo }}]</strong> ID: {{ inc.identificacion }} - {{ inc.nombre_completo }} ({{ inc.programa }}): {{ inc.detalle }}
-        </li>
-        {% endfor %}
-    </ul>
+<!-- Filtro por programa -->
+<div class="filter-section">
+    <form method="get" action="/">
+        <label for="programa"><strong>Filtrar por Programa:</strong></label>
+        <select name="programa" id="programa" onchange="this.form.submit()">
+            <option value="todos" {% if programa_sel == "todos" %}selected{% endif %}>Todos los programas</option>
+            {% for prog in programas %}
+            <option value="{{ prog }}" {% if programa_sel == prog %}selected{% endif %}>{{ prog }}</option>
+            {% endfor %}
+        </select>
+        <noscript><button type="submit">Filtrar</button></noscript>
+    </form>
 </div>
-{% endif %}
 
-<!-- Tabla de Estudiantes -->
+<!-- Tabla de resultados -->
 <div class="table-section">
-    <h2>Registro General de Estudiantes y Estado de Certificación</h2>
+    <h2>Resultados por estudiante y programa</h2>
     <div class="table-responsive">
         <table>
             <thead>
                 <tr>
-                    <th>Identificación</th>
-                    <th>Estudiante</th>
+                    <th>Nombre</th>
                     <th>Programa</th>
-                    <th>Promedio Nota</th>
-                    <th>Asistencia (%)</th>
-                    <th>Estado / Certificado</th>
+                    <th>Módulos</th>
+                    <th>Promedio</th>
+                    <th>Asistencia</th>
+                    <th>Certificado</th>
                 </tr>
             </thead>
             <tbody>
                 {% for est in estudiantes %}
                 <tr>
-                    <td><strong>{{ est.identificacion }}</strong></td>
-                    <td>{{ est.nombre_completo }}</td>
+                    <td>{{ est.nombre_completo }}<br><small>{{ est.identificacion }}</small></td>
                     <td>{{ est.programa }}</td>
+                    <td>{{ est.modulos }}</td>
                     <td>{{ "%.2f"|format(est.promedio_nota) }}</td>
                     <td>{{ "%.2f"|format(est.promedio_asistencia) }}%</td>
                     <td>
@@ -62,7 +62,7 @@
                         {% elif est.es_participacion %}
                             <span class="badge badge-participacion">Participación</span>
                         {% else %}
-                            <span class="badge badge-sin-certificado">Sin Certificado</span>
+                            <span class="badge badge-sin-certificado">Sin certificado</span>
                         {% endif %}
                     </td>
                 </tr>
@@ -71,4 +71,18 @@
         </table>
     </div>
 </div>
+
+<!-- Inconsistencias aparte -->
+{% if inconsistencias %}
+<div class="alert-section">
+    <h3>INCONSISTENCIAS ({{ conteos.inconsistencias }}) — no se certifican</h3>
+    <ul class="alert-list">
+        {% for inc in inconsistencias %}
+        <li class="alert-item">
+            <strong>[{{ inc.tipo }}]</strong> {{ inc.identificacion }} - {{ inc.nombre_completo }} ({{ inc.programa }}): {{ inc.detalle }}
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
 {% endblock %}

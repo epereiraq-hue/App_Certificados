@@ -7,10 +7,39 @@ Obtiene los datos exclusivamente a través del módulo models.datos.
 from typing import Any, Dict, List
 from models.datos import obtener_todos_estudiantes, obtener_todas_evaluaciones
 
-# Constantes de negocio
+# LADRILLO: variables tipo int/float con los limites del negocio (AGENTS.md R3-R5).
+# Los limites INCLUYEN el valor (>=).
 NOTA_MINIMA = 70
 ASISTENCIA_MINIMA = 80
 ASISTENCIA_INCONSISTENCIA_LIMITE = 50
+
+
+# LADRILLO: FUNCION que calcula un promedio.
+# Entrada: lista de notas (tipo list con numeros tipo float).
+# Salida: promedio redondeado a 2 decimales (tipo float).
+def calcular_promedio(lista_notas):
+    # LADRILLO: variable tipo float (suma de todas las notas).
+    total = sum(lista_notas)
+    # LADRILLO: variable tipo int (cantidad de modulos cursados).
+    cantidad = len(lista_notas)
+    # LADRILLO: variable tipo float (division suma / cantidad).
+    promedio = total / cantidad
+    return round(promedio, 2)
+
+
+# LADRILLO: FUNCION que decide el tipo de certificado segun AGENTS.md.
+# Entrada: promedio y asistencia (tipo float, ya redondeados).
+# Salida: texto (tipo str) con el tipo.
+def decidir_certificado(promedio, asistencia):
+    # LADRILLO: CONDICIONAL 1 (R5). Sin certificado si asistencia < 80.
+    if asistencia < ASISTENCIA_MINIMA:
+        return "Sin Certificado"
+    # LADRILLO: CONDICIONAL 2 (R3). Aprobacion si promedio >= 70 y asistencia >= 80.
+    elif promedio >= NOTA_MINIMA:
+        return "Aprobación"
+    # LADRILLO: CONDICIONAL 3 (R4). Lo que queda es Participacion.
+    else:
+        return "Participación"
 
 
 def obtener_resumen_certificados() -> Dict[str, Any]:
@@ -55,7 +84,8 @@ def obtener_resumen_certificados() -> Dict[str, Any]:
     participacion_cnt = 0
     sin_certificado_cnt = 0
 
-    # Todas las llaves únicas
+    # LADRILLO: BUCLE que recorre cada grupo de identificacion + programa (R1).
+    # Todas las llaves únicas (union de maestro y evaluaciones).
     todas_llaves = set(list(maestro_dict.keys()) + list(eval_dict.keys()))
 
     for key in sorted(todas_llaves, key=lambda x: (x[1], x[0])):
@@ -86,18 +116,22 @@ def obtener_resumen_certificados() -> Dict[str, Any]:
             })
             continue
 
-        # Estudiante evaluado presente en maestro
+        # Estudiante evaluado presente en maestro: calculamos con las FUNCIONES validadas.
         est = maestro_dict[key]
         evals = eval_dict[key]
 
-        total_notas = sum(float(e.get("nota") or 0) for e in evals)
-        total_asist = sum(float(e.get("asistencia_pct") or 0) for e in evals)
+        # LADRILLO: variables tipo list (notas y asistencias de los modulos).
+        lista_notas = [float(e.get("nota") or 0) for e in evals]
+        lista_asist = [float(e.get("asistencia_pct") or 0) for e in evals]
+        # LADRILLO: variable tipo int (modulos cursados).
         n_evals = len(evals)
 
-        promedio_nota = round(total_notas / n_evals, 2)
-        promedio_asist = round(total_asist / n_evals, 2)
+        # LADRILLO: llamadas a la FUNCION calcular_promedio (R2).
+        promedio_nota = calcular_promedio(lista_notas)
+        promedio_asist = calcular_promedio(lista_asist)
 
-        # Reglas R3, R4, R5, R6
+        # LADRILLO: llamada a la FUNCION decidir_certificado (R3-R5).
+        # Caso especial R6: asistencia menor a 50 % es inconsistencia y no se certifica.
         if promedio_asist < ASISTENCIA_INCONSISTENCIA_LIMITE:
             # Inconsistencia 3: Asistencia menor a 50%
             inconsistencias.append({
@@ -109,15 +143,15 @@ def obtener_resumen_certificados() -> Dict[str, Any]:
             })
             sin_certificado_cnt += 1
             estado_cert = "Sin Certificado"
-        elif promedio_nota >= NOTA_MINIMA and promedio_asist >= ASISTENCIA_MINIMA:
-            aprobacion_cnt += 1
-            estado_cert = "Aprobación"
-        elif promedio_nota < NOTA_MINIMA and promedio_asist >= ASISTENCIA_MINIMA:
-            participacion_cnt += 1
-            estado_cert = "Participación"
         else:
-            sin_certificado_cnt += 1
-            estado_cert = "Sin Certificado"
+            estado_cert = decidir_certificado(promedio_nota, promedio_asist)
+            # LADRILLO: CONDICIONALES para contar segun lo decidido.
+            if estado_cert == "Aprobación":
+                aprobacion_cnt += 1
+            elif estado_cert == "Participación":
+                participacion_cnt += 1
+            else:
+                sin_certificado_cnt += 1
 
         estudiantes_procesados.append({
             "identificacion": ident,
@@ -125,6 +159,7 @@ def obtener_resumen_certificados() -> Dict[str, Any]:
             "correo": est["correo"],
             "programa": prog,
             "cohorte": est["cohorte"],
+            "modulos": n_evals,
             "promedio_nota": promedio_nota,
             "promedio_asistencia": promedio_asist,
             "estado_certificado": estado_cert,
@@ -132,6 +167,9 @@ def obtener_resumen_certificados() -> Dict[str, Any]:
             "es_participacion": estado_cert == "Participación",
             "es_sin_certificado": estado_cert == "Sin Certificado"
         })
+
+    # Ordenar tabla por programa y nombre para el salon.
+    estudiantes_procesados.sort(key=lambda x: (x["programa"], x["nombre_completo"]))
 
     return {
         "conteos": {
