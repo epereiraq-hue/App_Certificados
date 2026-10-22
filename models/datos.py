@@ -7,13 +7,21 @@ y conmuta a SQLite local (app_certificados.db) si DATABASE_URL no está configur
 
 import os
 import sqlite3
+from pathlib import Path
 from typing import Any, Dict, List, Tuple
 from dotenv import load_dotenv
 
 # Cargar variables de entorno desde .env
 load_dotenv()
 
-DB_FILE = "app_certificados.db"
+# LADRILLO: variables de rutas. BASE_DIR es la carpeta del proyecto (donde esta app.py),
+# asi la base local siempre se encuentra, sin importar desde donde se ejecute.
+BASE_DIR = Path(__file__).resolve().parent.parent
+DB_FILE = BASE_DIR / "app_certificados.db"
+
+# LADRILLO: variable tipo bool. Vercel pone VERCEL=1 automaticamente.
+# En la nube NO existe el respaldo SQLite porque Vercel no guarda archivos.
+EN_VERCEL = bool(os.getenv("VERCEL"))
 
 
 def _es_postgres() -> bool:
@@ -24,15 +32,29 @@ def _es_postgres() -> bool:
 def obtener_conexion() -> Tuple[Any, str]:
     """Retorna una tupla (conexion, tipo_db) donde tipo_db es 'postgres' o 'sqlite'."""
     url = os.getenv("DATABASE_URL")
+    # LADRILLO: CONDICIONAL 1. Hay DATABASE_URL -> intentamos Supabase/PostgreSQL.
     if url and url.strip():
         try:
             import psycopg
             conn = psycopg.connect(url.strip(), prepare_threshold=None)
             return conn, "postgres"
         except Exception as e:
+            # En la nube NO se cae a SQLite: es mejor un error claro que un tablero vacio.
+            if EN_VERCEL:
+                raise RuntimeError(
+                    "No se pudo conectar a Supabase. Revisa la variable DATABASE_URL "
+                    f"en Vercel. Detalle: {e}"
+                ) from e
             print(f"[WARN] No se pudo conectar a Supabase/PostgreSQL ({e}). Usando SQLite local.")
 
-    # Fallback a SQLite local
+    # LADRILLO: CONDICIONAL 2. Sin DATABASE_URL en Vercel -> error explicito.
+    if EN_VERCEL:
+        raise RuntimeError(
+            "Falta la variable DATABASE_URL en Vercel. "
+            "En la nube la app solo funciona con Supabase (Vercel no guarda archivos)."
+        )
+
+    # LADRILLO: respaldo SOLO para trabajar en tu computadora.
     conn = sqlite3.connect(DB_FILE)
     conn.row_factory = sqlite3.Row
     return conn, "sqlite"

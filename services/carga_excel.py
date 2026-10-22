@@ -141,6 +141,25 @@ def procesar_registro_evaluaciones(
     return registros
 
 
+def cargar_desde_formulario(
+    archivo_maestro: Any,
+    archivo_evaluaciones: Any,
+) -> Tuple[int, int]:
+    """Carga los dos Excel que llegan desde el formulario web (/cargar).
+
+    Los archivos NO se guardan en disco: se leen en memoria, se validan
+    y se reemplazan las tablas de la base de datos.
+    Retorna (cantidad_estudiantes, cantidad_evaluaciones).
+    """
+    # LADRILLO: variables tipo list con las filas ya limpias de cada Excel.
+    estudiantes = procesar_maestro_estudiantes(archivo_maestro)
+    evaluaciones = procesar_registro_evaluaciones(archivo_evaluaciones)
+
+    total_estudiantes = reemplazar_estudiantes(estudiantes)
+    total_evaluaciones = reemplazar_evaluaciones(evaluaciones)
+    return total_estudiantes, total_evaluaciones
+
+
 def cargar_datos_desde_excel(
     ruta_maestro: Optional[Union[str, Path]] = None,
     ruta_evaluaciones: Optional[Union[str, Path]] = None,
@@ -153,12 +172,12 @@ def cargar_datos_desde_excel(
     base_dir = Path(__file__).resolve().parent.parent
 
     if ruta_maestro is None:
-        ruta_maestro = base_dir / "insumos" / "Maestro_Estudiantes.xlsx"
+        ruta_maestro = base_dir / "Insumos" / "Maestro_Estudiantes.xlsx"
     else:
         ruta_maestro = Path(ruta_maestro)
 
     if ruta_evaluaciones is None:
-        ruta_evaluaciones = base_dir / "insumos" / "Registro_Evaluaciones.xlsx"
+        ruta_evaluaciones = base_dir / "Insumos" / "Registro_Evaluaciones.xlsx"
     else:
         ruta_evaluaciones = Path(ruta_evaluaciones)
 

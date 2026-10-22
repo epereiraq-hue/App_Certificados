@@ -181,3 +181,30 @@ def obtener_resumen_certificados() -> Dict[str, Any]:
         "estudiantes": estudiantes_procesados,
         "inconsistencias": inconsistencias
     }
+
+
+# LADRILLO: FUNCION que dice si un estudiante lleva certificado (R3 y R4).
+# Aprobación y Participación sí; "Sin Certificado" no.
+def es_certificable(estudiante: Dict[str, Any]) -> bool:
+    return estudiante.get("estado_certificado") in ("Aprobación", "Participación")
+
+
+# LADRILLO: FUNCION que devuelve solo los estudiantes que llevan certificado.
+# La usan los controladores del PDF y del ZIP (así ellos no calculan nada).
+def obtener_certificados() -> List[Dict[str, Any]]:
+    resumen = obtener_resumen_certificados()
+    # LADRILLO: BUCLE con CONDICIONAL para quedarse solo con los certificables.
+    return [e for e in resumen["estudiantes"] if es_certificable(e)]
+
+
+# LADRILLO: FUNCION que busca un estudiante por identificacion + programa (R1).
+# Devuelve el diccionario o None si no existe.
+def buscar_estudiante(identificacion: str, programa: str) -> Dict[str, Any] | None:
+    identificacion_buscada = str(identificacion).strip()
+    programa_buscado = str(programa).strip()
+    resumen = obtener_resumen_certificados()
+    # LADRILLO: BUCLE con CONDICIONAL para encontrar la pareja exacta.
+    for est in resumen["estudiantes"]:
+        if est["identificacion"] == identificacion_buscada and est["programa"] == programa_buscado:
+            return est
+    return None

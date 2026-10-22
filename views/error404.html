@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}No encontrado - Academia Horizonte{% endblock %}
+
+{% block content %}
+<div class="alert-box alert-error">
+    <strong>No se encontró esa página o ese certificado.</strong>
+    <p>{{ mensaje }}</p>
+</div>
+
+<p class="back-link">
+    <a href="{{ url_for('tablero.index') }}">&larr; Volver al tablero</a>
+</p>
+{% endblock %}

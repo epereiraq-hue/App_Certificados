@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Cargar Excel - Academia Horizonte{% endblock %}
+
+{% block content %}
+<!-- Encabezado de la pagina -->
+<div class="page-head">
+    <h2>Cargar los datos de la cohorte</h2>
+    <p>Sube los dos archivos Excel de la carpeta <strong>Insumos</strong>. Los datos anteriores se reemplazan.</p>
+</div>
+
+<!-- LADRILLO: CONDICIONAL. Solo aparece si hubo un error al leer los archivos. -->
+{% if error %}
+<div class="alert-box alert-error">
+    <strong>No se pudo cargar:</strong> {{ error }}
+</div>
+{% endif %}
+
+<!-- LADRILLO: CONDICIONAL. Solo aparece cuando la carga salió bien. -->
+{% if resultado %}
+<div class="alert-box alert-ok">
+    <strong>Carga completada.</strong>
+    Se guardaron {{ resultado.estudiantes }} estudiantes y {{ resultado.evaluaciones }} evaluaciones.
+    <a class="btn btn-primary btn-small" href="{{ url_for('tablero.index') }}">Ver el tablero</a>
+</div>
+{% endif %}
+
+<!-- Formulario de subida -->
+<div class="form-card">
+    <form method="post" action="{{ url_for('carga.cargar') }}" enctype="multipart/form-data">
+        <div class="field">
+            <label for="maestro">1. Maestro de Estudiantes (hoja "Estudiantes")</label>
+            <input type="file" id="maestro" name="maestro" accept=".xlsx,.xls" required>
+        </div>
+        <div class="field">
+            <label for="evaluaciones">2. Registro de Evaluaciones (hoja "Evaluaciones")</label>
+            <input type="file" id="evaluaciones" name="evaluaciones" accept=".xlsx,.xls" required>
+        </div>
+        <button type="submit" class="btn btn-gold">Guardar en la base de datos</button>
+    </form>
+</div>
+
+<p class="back-link">
+    <a href="{{ url_for('tablero.index') }}">&larr; Volver al tablero</a>
+</p>
+{% endblock %}

@@ -12,6 +12,13 @@
         <p>Sistema de Emisión de Certificados por Cohorte</p>
     </header>
 
+    <!-- Menu de navegacion: solo enlaces, aqui no se calcula nada. -->
+    <nav class="nav-bar">
+        <a href="{{ url_for('tablero.index') }}">Tablero</a>
+        <a href="{{ url_for('carga.cargar') }}">Cargar Excel</a>
+        <a href="{{ url_for('certificados.descargar_todos') }}">Descargar todos los certificados (ZIP)</a>
+    </nav>
+
     <main class="container">
         {% block content %}{% endblock %}
     </main>

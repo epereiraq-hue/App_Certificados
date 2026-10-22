@@ -9,3 +9,6 @@ __pycache__/
 *~
 .DS_Store
 Thumbs.db
+# Base local de trabajo: en la nube se usa Supabase (DATABASE_URL).
+app_certificados.db
+*.db

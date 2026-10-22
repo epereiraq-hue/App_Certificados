@@ -238,3 +238,173 @@ footer {
     font-size: 0.9rem;
     margin-top: 3rem;
 }
+
+/* Menu de navegacion */
+.nav-bar {
+    background-color: #0E1830;
+    padding: 0.75rem 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+}
+
+.nav-bar a {
+    color: #FFFFFF;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    border-bottom: 2px solid transparent;
+    padding-bottom: 0.15rem;
+}
+
+.nav-bar a:hover {
+    color: #FFFFFF;
+    border-bottom-color: var(--accent-color);
+}
+
+/* Barra de acciones del tablero */
+.actions-bar {
+    background: var(--card-bg);
+    border-radius: 8px;
+    padding: 1rem 1.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+}
+
+.actions-note {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+/* Botones */
+.btn {
+    display: inline-block;
+    padding: 0.65rem 1.25rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.btn:hover {
+    opacity: 0.88;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: #FFFFFF;
+}
+
+.btn-gold {
+    background-color: var(--accent-color);
+    color: #FFFFFF;
+}
+
+.btn-small {
+    padding: 0.4rem 0.9rem;
+    font-size: 0.85rem;
+    margin-left: 0.75rem;
+}
+
+/* Boton pequeno dentro de la tabla */
+.btn-pdf {
+    display: inline-block;
+    padding: 0.3rem 0.7rem;
+    border-radius: 20px;
+    background-color: var(--accent-light);
+    color: var(--accent-color);
+    border: 1px solid var(--accent-color);
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.btn-pdf:hover {
+    background-color: var(--accent-color);
+    color: #FFFFFF;
+}
+
+.text-muted {
+    color: var(--text-muted);
+}
+
+/* Pagina de carga de Excel */
+.page-head {
+    margin-bottom: 1.5rem;
+}
+
+.page-head h2 {
+    color: var(--primary-color);
+}
+
+.page-head p {
+    color: var(--text-muted);
+}
+
+.form-card {
+    background: var(--card-bg);
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    border-top: 4px solid var(--accent-color);
+}
+
+.field {
+    margin-bottom: 1.25rem;
+}
+
+.field label {
+    display: block;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 0.4rem;
+}
+
+.field input[type="file"] {
+    width: 100%;
+    padding: 0.6rem;
+    border: 1px dashed var(--border-color);
+    border-radius: 6px;
+    background-color: var(--bg-light);
+}
+
+.alert-box {
+    border-radius: 6px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+}
+
+.alert-ok {
+    background-color: var(--success-bg);
+    border-left: 5px solid var(--success-color);
+    color: #1B5E20;
+}
+
+.alert-error {
+    background-color: var(--danger-bg);
+    border-left: 5px solid var(--danger-color);
+    color: var(--danger-color);
+}
+
+.back-link {
+    margin-top: 1.5rem;
+}
+
+.back-link a {
+    color: var(--primary-color);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.back-link a:hover {
+    color: var(--accent-color);
+}

@@ -1,0 +1,14 @@
+# Archivos que NO deben viajar a Vercel (hacen el paquete pesado sin necesidad).
+.venv/
+__pycache__/
+*.pyc
+*.db
+.git/
+.gitignore
+.agents/
+.vercel/
+*.log
+*.tmp
+.DS_Store
+Thumbs.db
+iniciar_app.bat

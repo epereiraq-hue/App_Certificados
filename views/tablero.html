@@ -3,6 +3,13 @@
 {% block title %}Tablero Principal - Academia Horizonte{% endblock %}
 
 {% block content %}
+<!-- Barra de acciones rapidas: enlaces a cargar Excel y bajar el ZIP. -->
+<div class="actions-bar">
+    <a class="btn btn-gold" href="{{ url_for('carga.cargar') }}">Cargar los 2 Excel</a>
+    <a class="btn btn-primary" href="{{ url_for('certificados.descargar_todos') }}">Descargar todos los certificados (ZIP)</a>
+    <span class="actions-note">Certificados a emitir: {{ conteos.aprobacion }} de Aprobación y {{ conteos.participacion }} de Participación.</span>
+</div>
+
 <!-- Contadores de arriba -->
 <div class="kpi-grid">
     <div class="kpi-card aprobacion">
@@ -46,6 +53,7 @@
                     <th>Promedio</th>
                     <th>Asistencia</th>
                     <th>Certificado</th>
+                    <th>PDF</th>
                 </tr>
             </thead>
             <tbody>
@@ -63,6 +71,14 @@
                             <span class="badge badge-participacion">Participación</span>
                         {% else %}
                             <span class="badge badge-sin-certificado">Sin certificado</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <!-- LADRILLO: CONDICIONAL. Solo Aprobación y Participación llevan PDF. -->
+                        {% if est.es_aprobado or est.es_participacion %}
+                            <a class="btn-pdf" href="{{ url_for('certificados.certificado', identificacion=est.identificacion, programa=est.programa) }}">Descargar PDF</a>
+                        {% else %}
+                            <span class="text-muted">&mdash;</span>
                         {% endif %}
                     </td>
                 </tr>
